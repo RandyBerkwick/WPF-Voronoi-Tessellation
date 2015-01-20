@@ -1,4 +1,5 @@
-using UnityEngine;
+
+using Delaunay.geo;
 using System;
 
 namespace Delaunay
@@ -7,12 +8,12 @@ namespace Delaunay
 	{
 		public sealed class Circle
 		{
-			public Vector2 center;
+			public Point center;
 			public float radius;
 		
 			public Circle (float centerX, float centerY, float radius)
 			{
-				this.center = new Vector2 (centerX, centerY);
+				this.center = new Point (centerX, centerY);
 				this.radius = radius;
 			}
 		

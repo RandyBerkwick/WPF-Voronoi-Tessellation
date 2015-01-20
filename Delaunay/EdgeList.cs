@@ -1,10 +1,12 @@
-using UnityEngine;
-using Delaunay.Utils;
 
+
+
+using Delaunay.geo;
+using System;
 namespace Delaunay
 {
 	
-	internal sealed class EdgeList: Utils.IDisposable
+	internal sealed class EdgeList: IDisposable
 	{
 		private float _deltax;
 		private float _xmin;
@@ -93,7 +95,7 @@ namespace Delaunay
 		 * @return 
 		 * 
 		 */
-		public Halfedge EdgeListLeftNeighbor (Vector2 p)
+		public Halfedge EdgeListLeftNeighbor (Point p)
 		{
 			int i, bucket;
 			Halfedge halfEdge;

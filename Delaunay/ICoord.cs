@@ -1,12 +1,12 @@
-using UnityEngine;
-
+using Delaunay.geo;
 namespace Delaunay
 {
-	
-	public interface ICoord
-	{
-		Vector2 Coord {
-			get;
-		}
-	}
+
+    public interface ICoord
+    {
+        Point Coord
+        {
+            get;
+        }
+    }
 }

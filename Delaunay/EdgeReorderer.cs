@@ -1,5 +1,5 @@
 using Delaunay.LR;
-using Delaunay.Utils;
+using System;
 using System.Collections.Generic;
 
 /** This class is horrible, and ought to be nuked from orbit. But the library is
@@ -27,7 +27,7 @@ namespace Delaunay
 		SITE
 	}
 	
-	sealed class EdgeReorderer: Utils.IDisposable
+	sealed class EdgeReorderer: IDisposable
 	{
 		private List<Edge> _edges;
 		private List<Side> _edgeOrientations;

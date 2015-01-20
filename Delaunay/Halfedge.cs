@@ -1,15 +1,16 @@
-using UnityEngine;
+
 using System;
 using System.Collections.Generic;
 using Delaunay.LR;
 using Delaunay.Geo;
-using Delaunay.Utils;
+using Delaunay.geo;
+
 
 namespace Delaunay
 {
 
 	
-	public sealed class Halfedge: Delaunay.Utils.IDisposable
+	public sealed class Halfedge: IDisposable
 	{
 		private static Stack<Halfedge> _pool = new Stack<Halfedge> ();
 		public static Halfedge Create (Edge edge, Nullable<Side> lr)
@@ -82,7 +83,7 @@ namespace Delaunay
 			_pool.Push (this);
 		}
 
-		internal bool IsLeftOf (Vector2 p)
+		internal bool IsLeftOf (Point p)
 		{
 			Site topSite;
 			bool rightOfSite, above, fast;

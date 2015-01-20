@@ -1,22 +1,23 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 using System.Collections.Generic;
 using Delaunay;
 using Delaunay.Geo;
 
 using VoronoiNS;
+using Delaunay.geo;
+
 
 /**
 Upgrade of VoronoiDemo class, with a clearer name, and some better
 interactivity.
 
  */
-public class VoronoiPolygonator : MonoBehaviour
+public class VoronoiPolygonator
 {
 	
 		public int numSitesToGenerate = 20;
-		private List<Vector2> m_points;
+		private List<Point> m_points;
 		private float m_mapWidth = 20;
 		private float m_mapHeight = 10;
 		private List<LineSegment> m_edges = null;
@@ -34,11 +35,11 @@ public class VoronoiPolygonator : MonoBehaviour
 		{
 		
 				List<uint> colors = new List<uint> ();
-				m_points = new List<Vector2> ();
+				m_points = new List<Point> ();
 		
 				for (int i = 0; i < numSitesToGenerate; i++) {
 						colors.Add (0);
-						m_points.Add (new Vector2 (
+						m_points.Add (new Point (
 				UnityEngine.Random.Range (0, m_mapWidth),
 				UnityEngine.Random.Range (0, m_mapHeight))
 						);
@@ -85,8 +86,8 @@ public class VoronoiPolygonator : MonoBehaviour
 						if (m_edges != null) {
 								Gizmos.color = Color.gray;
 								for (int i = 0; i< m_edges.Count; i++) {
-										Vector2 left = (Vector2)m_edges [i].p0;
-										Vector2 right = (Vector2)m_edges [i].p1;
+										Point left = (Point)m_edges [i].p0;
+										Point right = (Point)m_edges [i].p1;
 										Gizmos.DrawLine ((Vector3)left, (Vector3)right);
 								}
 						}
@@ -96,8 +97,8 @@ public class VoronoiPolygonator : MonoBehaviour
 						Gizmos.color = Color.magenta;
 						if (m_delaunayTriangulation != null) {
 								for (int i = 0; i< m_delaunayTriangulation.Count; i++) {
-										Vector2 left = (Vector2)m_delaunayTriangulation [i].p0;
-										Vector2 right = (Vector2)m_delaunayTriangulation [i].p1;
+										Point left = (Point)m_delaunayTriangulation [i].p0;
+										Point right = (Point)m_delaunayTriangulation [i].p1;
 										Gizmos.DrawLine ((Vector3)left, (Vector3)right);
 								}
 						}
@@ -108,8 +109,8 @@ public class VoronoiPolygonator : MonoBehaviour
 								Gizmos.color = Color.green;
 								for (int i = 0; i< m_spanningTree.Count; i++) {
 										LineSegment seg = m_spanningTree [i];				
-										Vector2 left = (Vector2)seg.p0;
-										Vector2 right = (Vector2)seg.p1;
+										Point left = (Point)seg.p0;
+										Point right = (Point)seg.p1;
 										Gizmos.DrawLine ((Vector3)left, (Vector3)right);
 								}
 						}
@@ -119,7 +120,7 @@ public class VoronoiPolygonator : MonoBehaviour
 		Note that the list is points, not lines, and you usually have to manually CLOSE the final point to the first */
 				if (DrawVoronoiRegions) {
 						Debug.Log ("Found " + v.Regions ().Count + " regions to draw");
-						foreach (List<Vector2> region in v.Regions()) {
+						foreach (List<Point> region in v.Regions()) {
 								if (randomizeVoronoiColours) /** Note: the Edges display above (in Gray) shows unconnected edges,
 		but this section re-uses the actual semi-polygons created automatically by the Voronoi algorithm. To prove
 		this you can optionally turn on colourization of the edges, so that that shared edges will show with same colours
@@ -129,8 +130,8 @@ public class VoronoiPolygonator : MonoBehaviour
 										Gizmos.color = Color.white;
 				
 								for (int i = 0; i+1<region.Count; i++) {
-										Vector2 s = (Vector2)region [i];
-										Vector2 e = (Vector2)region [i + 1];
+										Point s = (Point)region [i];
+										Point e = (Point)region [i + 1];
 					
 										if (randomizeVoronoiColours) {
 												/** To make them easier to see, shift the vectors SLIGHTLY towards the center point.
@@ -147,7 +148,7 @@ public class VoronoiPolygonator : MonoBehaviour
 								}
 				
 								if (CloseExternalVoronoPolys) {
-										Gizmos.DrawLine ((Vector2)region [region.Count - 1], (Vector2)region [0]);
+										Gizmos.DrawLine ((Point)region [region.Count - 1], (Point)region [0]);
 								}
 						}
 				}
@@ -165,8 +166,8 @@ public class VoronoiPolygonator : MonoBehaviour
 						/** Note, the SiteCoords are identical to the raw Points array you passed-in when creating the Voronoi object,
 		I think. So ... you could safely re-use that here instead of fetching it from the Voronoi object (maybe; could be
 		some filteing happening? Dupes removed, etc?) */
-						List<Vector2> ses = m_points;// v.SiteCoords ();
-						foreach (Vector2 siteCoord in ses) {
+						List<Point> ses = m_points;// v.SiteCoords ();
+						foreach (Point siteCoord in ses) {
 								if (randomizeVoronoiColours) /** Note: the Edges display above (in Gray) shows unconnected edges,
 		but this section re-uses the actual semi-polygons created automatically by the Voronoi algorithm. To prove
 		this you can optionally turn on colourization of the edges, so that that shared edges will show with same colours
@@ -180,12 +181,12 @@ public class VoronoiPolygonator : MonoBehaviour
 			when you run the algorithm - but that data structure throws-away the Site/Point that generates each Region.
 			*/
 								List<LineSegment> outlineOfSite = v.VoronoiBoundaryForSite (siteCoord);
-								List<Vector2> pointsOnPolygonOutline = null;
+								List<Point> pointsOnPolygonOutline = null;
 								if (CloseExternalVoronoPolys)
-										pointsOnPolygonOutline = new List<Vector2> ();
+										pointsOnPolygonOutline = new List<Point> ();
 								foreach (LineSegment seg in outlineOfSite) {
-										Vector2 s = (Vector2)seg.p0;
-										Vector2 e = (Vector2)seg.p1;
+										Point s = (Point)seg.p0;
+										Point e = (Point)seg.p1;
 		
 										if (randomizeVoronoiColours) {
 												/** To make them easier to see, shift the vectors SLIGHTLY towards the center point.
@@ -204,12 +205,12 @@ public class VoronoiPolygonator : MonoBehaviour
 								}
 		
 								if (CloseExternalVoronoPolys) {
-										List<Vector2> unduplicatedPoints = new List<Vector2> ();
+										List<Point> unduplicatedPoints = new List<Point> ();
 				
 										//Debug.Log( "Closing outline; "+pointsOnPolygonOutline.Count+" points on outline, with "+outlineOfSite.Count+" lines between them");
-										foreach (Vector2 point in pointsOnPolygonOutline) {
-												Vector2 dupe;
-												if ((dupe = ListContainsVectorCloseToVector (unduplicatedPoints, point)) != Vector2.zero) {
+										foreach (Point point in pointsOnPolygonOutline) {
+												Point dupe;
+												if ((dupe = ListContainsVectorCloseToVector (unduplicatedPoints, point)) != Point.zero) {
 														//Debug.Log( " - point: "+point);
 														unduplicatedPoints.Remove (dupe);
 												} else {
@@ -228,7 +229,7 @@ public class VoronoiPolygonator : MonoBehaviour
 								if (DrawManualVoronoiLinesToCenter) {
 										foreach (LineSegment seg in outlineOfSite) {
 												Gizmos.color = Color.gray;
-												Gizmos.DrawLine ((Vector2)seg.p0, siteCoord);
+												Gizmos.DrawLine ((Point)seg.p0, siteCoord);
 										}
 								}
 						}
@@ -236,24 +237,24 @@ public class VoronoiPolygonator : MonoBehaviour
 		
 				if (DrawBounds) {
 						Gizmos.color = Color.yellow;
-						Gizmos.DrawLine (new Vector2 (0, 0), new Vector2 (0, m_mapHeight));
-						Gizmos.DrawLine (new Vector2 (0, 0), new Vector2 (m_mapWidth, 0));
-						Gizmos.DrawLine (new Vector2 (m_mapWidth, 0), new Vector2 (m_mapWidth, m_mapHeight));
-						Gizmos.DrawLine (new Vector2 (0, m_mapHeight), new Vector2 (m_mapWidth, m_mapHeight));
+						Gizmos.DrawLine (new Point (0, 0), new Point (0, m_mapHeight));
+						Gizmos.DrawLine (new Point (0, 0), new Point (m_mapWidth, 0));
+						Gizmos.DrawLine (new Point (m_mapWidth, 0), new Point (m_mapWidth, m_mapHeight));
+						Gizmos.DrawLine (new Point (0, m_mapHeight), new Point (m_mapWidth, m_mapHeight));
 				}
 		}
 	
-		/** Returns the dupe item in list so you can remove it; Voronoi library is abusing Vector2 class and returning non-equivalent equivalent objects */
-		private Vector2 ListContainsVectorCloseToVector (List<Vector2> l, Vector2 p)
+		/** Returns the dupe item in list so you can remove it; Voronoi library is abusing Point class and returning non-equivalent equivalent objects */
+		private Point ListContainsVectorCloseToVector (List<Point> l, Point p)
 		{
-				foreach (Vector2 v in l) {
+				foreach (Point v in l) {
 						if (DoesPointEqualPointEpsilon (v, p))
 								return v;
 				}
-				return Vector2.zero;
+				return Point.zero;
 		}
 
-		private bool DoesPointEqualPointEpsilon (Vector2 p1, Vector2 p2, float eps = 0.0001f)
+		private bool DoesPointEqualPointEpsilon (Point p1, Point p2, float eps = 0.0001f)
 		{
 				if (Mathf.Abs (p1.x - p2.x) > eps)
 						return false;

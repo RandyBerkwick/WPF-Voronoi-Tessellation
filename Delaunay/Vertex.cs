@@ -1,7 +1,8 @@
-using UnityEngine;
+
 using System;
 using System.Collections.Generic;
 using Delaunay.LR;
+using Delaunay.geo;
 
 namespace Delaunay
 {
@@ -26,8 +27,8 @@ namespace Delaunay
 
 		private static int _nvertices = 0;
 		
-		private Vector2 _coord;
-		public Vector2 Coord {
+		private Point _coord;
+		public Point Coord {
 			get { return _coord;}
 		}
 		private int _vertexIndex;
@@ -42,7 +43,7 @@ namespace Delaunay
 		
 		private Vertex Init (float x, float y)
 		{
-			_coord = new Vector2 (x, y);
+			_coord = new Point (x, y);
 			return this;
 		}
 		

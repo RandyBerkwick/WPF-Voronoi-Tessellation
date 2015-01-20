@@ -1,13 +1,16 @@
-using UnityEngine;
+
 using System;
 using System.Collections.Generic;
 using Delaunay.Geo;
-using Delaunay.Utils;
+using Delaunay.geo;
+using System.Diagnostics;
+
+
 
 namespace Delaunay
 {
 
-	public sealed class SiteList: Utils.IDisposable
+	public sealed class SiteList: IDisposable
 	{
 		private List<Site> _sites;
 		private int _currentIndex;
@@ -46,7 +49,7 @@ namespace Delaunay
 		public Site Next ()
 		{
 			if (_sorted == false) {
-				UnityEngine.Debug.LogError ("SiteList::next():  sites have not been sorted");
+				Debug.WriteLine ("SiteList::next():  sites have not been sorted","Error");
 			}
 			if (_currentIndex < _sites.Count) {
 				return _sites [_currentIndex++];
@@ -95,9 +98,9 @@ namespace Delaunay
 			return colors;
 		}
 
-		public List<Vector2> SiteCoords ()
+		public List<Point> SiteCoords ()
 		{
-			List<Vector2> coords = new List<Vector2> ();
+			List<Point> coords = new List<Point> ();
 			Site site;
 			for (int i = 0; i<_sites.Count; i++) {
 				site = _sites [i];
@@ -129,9 +132,9 @@ namespace Delaunay
 			return circles;
 		}
 
-		public List<List<Vector2>> Regions (Rect plotBounds)
+		public List<List<Point>> Regions (Rect plotBounds)
 		{
-			List<List<Vector2>> regions = new List<List<Vector2>> ();
+			List<List<Point>> regions = new List<List<Point>> ();
 			Site site;
 			for (int i = 0; i< _sites.Count; i++) {
 				site = _sites [i];
@@ -148,7 +151,7 @@ namespace Delaunay
 		 * @return coordinates of nearest Site to (x, y)
 		 * 
 		 */
-		public Nullable<Vector2> NearestSitePoint (/*proximityMap:BitmapData,*/float x, float y)
+		public Nullable<Point> NearestSitePoint (/*proximityMap:BitmapData,*/float x, float y)
 		{
 //			uint index = proximityMap.getPixel(x, y);
 //			if (index > _sites.length - 1)
