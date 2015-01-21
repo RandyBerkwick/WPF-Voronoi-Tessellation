@@ -1,8 +1,6 @@
-
-using Delaunay.geo;
 using System;
 using System.Collections.Generic;
-
+using System.Windows;
 
 namespace Delaunay
 {
@@ -14,10 +12,10 @@ namespace Delaunay
         private int _minBucket;
         private int _hashsize;
 
-        private float _ymin;
-        private float _deltay;
+        private double _ymin;
+        private double _deltay;
 
-        public HalfedgePriorityQueue(float ymin, float deltay, int sqrt_nsites)
+        public HalfedgePriorityQueue(double ymin, double deltay, int sqrt_nsites)
         {
             _ymin = ymin;
             _deltay = deltay;

@@ -1,15 +1,12 @@
-
-
-
-using Delaunay.geo;
 using System;
+using System.Windows;
 namespace Delaunay
 {
 	
 	internal sealed class EdgeList: IDisposable
 	{
-		private float _deltax;
-		private float _xmin;
+		private double  _deltax;
+		private double  _xmin;
 		
 		private int _hashsize;
 		private Halfedge[] _hash;
@@ -42,7 +39,7 @@ namespace Delaunay
 			_hash = null;
 		}
 		
-		public EdgeList (float xmin, float deltax, int sqrt_nsites)
+		public EdgeList (double  xmin, double  deltax, int sqrt_nsites)
 		{
 			_xmin = xmin;
 			_deltax = deltax;
@@ -101,7 +98,7 @@ namespace Delaunay
 			Halfedge halfEdge;
 		
 			/* Use hash table to get close to desired halfedge */
-			bucket = (int)((p.x - _xmin) / _deltax * _hashsize);
+			bucket = (int)((p.X - _xmin) / _deltax * _hashsize);
 			if (bucket < 0) {
 				bucket = 0;
 			}

@@ -1,6 +1,6 @@
-using Delaunay.geo;
 using System;
-
+using System.Windows;
+using Delaunay;
 
 namespace Delaunay.Geo
 {
@@ -8,8 +8,8 @@ namespace Delaunay.Geo
     {
         public static int CompareLengths_MAX(LineSegment segment0, LineSegment segment1)
         {
-            float length0 = Point.Distance((Point)segment0.p0, (Point)segment0.p1);
-            float length1 = Point.Distance((Point)segment1.p0, (Point)segment1.p1);
+            double  length0 = DelaunayHelpers.Distance((Point)segment0.p0, (Point)segment0.p1);
+            double length1 = DelaunayHelpers.Distance((Point)segment1.p0, (Point)segment1.p1);
             if (length0 < length1)
             {
                 return 1;
