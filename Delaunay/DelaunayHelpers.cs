@@ -1,9 +1,8 @@
-
 using System;
 using System.Collections.Generic;
 using Delaunay.Geo;
 using Delaunay.LR;
-using Delaunay.geo;
+using System.Windows;
 
 
 namespace Delaunay
@@ -25,6 +24,14 @@ namespace Delaunay
 
     public static class DelaunayHelpers
     {
+        public static double Distance(this Point p1, Point p2)
+        {
+            var dx = p1.X - p2.X;
+            var dy = p1.Y - p2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+
         public static List<LineSegment> VisibleLineSegments(List<Edge> edges)
         {
             List<LineSegment> segments = new List<LineSegment>();

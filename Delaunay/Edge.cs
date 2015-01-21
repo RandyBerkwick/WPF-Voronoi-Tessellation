@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using Delaunay.Geo;
 using Delaunay.LR;
-using Delaunay.geo;
-
+using System.Windows;
 
 namespace Delaunay
 {
@@ -37,8 +36,8 @@ namespace Delaunay
 			 */
 		public static Edge CreateBisectingEdge (Site site0, Site site1)
 		{
-			float dx, dy, absdx, absdy;
-			float a, b, c;
+			double  dx, dy, absdx, absdy;
+			double  a, b, c;
 			
 			dx = site1.x - site0.x;
 			dy = site1.y - site0.y;
@@ -144,7 +143,7 @@ namespace Delaunay
 		public static readonly Edge DELETED = new Edge ();
 			
 		// the equation of the edge: ax + by = c
-		public float a, b, c;
+		public double  a, b, c;
 			
 		// the two Voronoi vertices that the edge connects
 		//		(if one of them is null, the edge extends to infinity)
@@ -174,15 +173,15 @@ namespace Delaunay
 			return (_leftVertex == null || _rightVertex == null);
 		}
 			
-		public float SitesDistance ()
+		public double  SitesDistance ()
 		{
-			return Point.Distance (leftSite.Coord, rightSite.Coord);
+            return DelaunayHelpers.Distance(leftSite.Coord, rightSite.Coord);
 		}
 			
 		public static int CompareSitesDistances_MAX (Edge edge0, Edge edge1)
 		{
-			float length0 = edge0.SitesDistance ();
-			float length1 = edge1.SitesDistance ();
+			double  length0 = edge0.SitesDistance ();
+			double  length1 = edge1.SitesDistance ();
 			if (length0 < length1) {
 				return 1;
 			}
@@ -279,13 +278,13 @@ namespace Delaunay
 			 */
 		public void ClipVertices (Rect bounds)
 		{
-			float xmin = bounds.xMin;
-			float ymin = bounds.yMin;
-			float xmax = bounds.xMax;
-			float ymax = bounds.yMax;
+			double  xmin = bounds.Left;
+			double  ymin = bounds.Top;
+			double  xmax = bounds.Right;
+			double  ymax = bounds.Bottom;
 				
 			Vertex vertex0, vertex1;
-			float x0, x1, y0, y1;
+			double  x0, x1, y0, y1;
 				
 			if (a == 1.0 && b >= 0.0) {
 				vertex0 = _rightVertex;
